@@ -1,0 +1,121 @@
+:root {
+  --charcoal: #1c1c1e;
+}
+
+.app {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --page-pad-x: clamp(8px, 3vw, 20px);
+  --page-pad-y: clamp(8px, 1.8vh, 20px);
+  --title-size: clamp(1.4rem, 5.5vw, 2.1rem);
+  --title-gap: clamp(8px, 1.8vh, 18px);
+  --grid-gap: clamp(4px, 1.1vmin, 10px);
+  --viewport-height: 100vh;
+  --available-height: calc(
+    var(--viewport-height) - var(--safe-top) - var(--safe-bottom) -
+      2 * var(--page-pad-y) - 1.1 * var(--title-size) - var(--title-gap) -
+      9 * var(--grid-gap)
+  );
+  --button-size: min(
+    calc((100vw - 2 * var(--page-pad-x) - 4 * var(--grid-gap)) / 5),
+    calc(var(--available-height) / 10)
+  );
+
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--title-gap);
+  width: 100%;
+  height: var(--viewport-height);
+  padding: calc(var(--safe-top) + var(--page-pad-y)) var(--page-pad-x)
+    calc(var(--safe-bottom) + var(--page-pad-y));
+  overflow: hidden;
+  background-color: var(--charcoal);
+  text-align: center;
+}
+
+@supports (height: 100dvh) {
+  .app {
+    --viewport-height: 100dvh;
+  }
+}
+
+.title {
+  flex: none;
+  margin: 0;
+  color: #ffffff;
+  font-size: var(--title-size);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+}
+
+.kana-grid {
+  display: grid;
+  grid-template-columns: repeat(5, var(--button-size));
+  grid-auto-rows: var(--button-size);
+  gap: var(--grid-gap);
+}
+
+.kana-placeholder {
+  display: block;
+  width: var(--button-size);
+  height: var(--button-size);
+}
+
+.kana-button {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: clamp(10px, calc(var(--button-size) * 0.22), 24px);
+  background-color: hsl(var(--kana-hue, 220), 55%, 42%);
+  background-image: linear-gradient(
+    155deg,
+    hsl(var(--kana-hue, 220), 68%, 52%),
+    hsl(var(--kana-hue, 220), 62%, 34%)
+  );
+  color: #ffffff;
+  box-shadow: inset 0 0 0 1px hsla(var(--kana-hue, 220), 80%, 88%, 0.28);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic',
+    'Noto Sans JP', 'Meiryo', sans-serif;
+  font-size: calc(var(--button-size) * 0.62);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform 120ms ease, background-color 120ms ease;
+}
+
+.kana-button.is-katakana {
+  filter: brightness(1.18);
+  transform: scale(0.96);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.75);
+}
+
+.kana-button:active {
+  transform: scale(0.94);
+}
+
+.kana-button:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kana-button {
+    transition: none;
+  }
+}
